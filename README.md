@@ -1,4 +1,4 @@
-![Habitica Nushell Dashboard](assets/banner.png)
+![Habitica Nushell Dashboard](assets/banner.jpg)
 
 # ⚔️ Habitica & Nushell
 Lleva tu productividad al siguiente nivel convirtiendo tu terminal en un centro de mando RPG. Este script permite sincronizar tus estadísticas de Habitica y gestionar tus tareas directamente desde Nushell, de forma rápida, estética y asíncrona.
