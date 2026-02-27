@@ -34,13 +34,17 @@ Esto lo hice en una tarde debido a que Habitica esta muy por detrás de otras he
 
 Esto no quiere decir que no vaya a seguir creciendo, pienso ponerle mas y mas caracteristicas que me permitan poder manejar gran parte de las funciones de la plataforma desde el terminal, por ejemplo ponerle fecha a las tareas que agrego, lanzar hechizos, etc... Tiempo al tiempo.
 
+![Habitica Nushell Dashboard](assets/terminal.png)
+
 # ⚙️ Instalación
 
 NOTA: Teniendo en cuenta que tu terminal ya corre NUshell o cualquiera que use NU
 
 1. Crea una carpeta en tu PC y pega ahi el archivo habitica.nu
 2. Escribe en tu terminal ```config nu``` y agrega esta linea ```use "C:/Direccion_de_tu_archivo/habitica.nu" *```
-3. Reinicia el terminar o cierralo y vuelve a abrirlo
+3. Abre el archivo habitica.nu y en las primeras lineas, agrega tu USER_ID y tu API_TOKEN de Habitica (no compartas este último)
+4. Yo uso cache, para no tener que consultar tanto el API, en la variable CACHE_FILE, asignale una dirección donde quieres almacenar el archivo json de cache (preferiblemente al lado de habitica.nu)
+5. Reinicia el terminar o cierralo y vuelve a abrirlo
 
 ### Todo lo que necesites editar, esta en ese archivo, eres libre de extenderlo si quieres.
 
