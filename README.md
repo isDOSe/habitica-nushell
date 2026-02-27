@@ -10,7 +10,7 @@ Lleva tu productividad al siguiente nivel convirtiendo tu terminal en un centro 
 - 📅 Filtro Inteligente: Muestra únicamente las tareas programadas para el día de hoy.
 - ⚡ Ligero: Escrito 100% en Nushell puro, sin dependencias externas pesadas.
 
-### ⚠️ DISCLAIMER: Yo uso Windows, esto fue desarrollado usando para NUshell bajo el Windows Terminal (el ultimo que salio). Al ser NUshell --se supone-- que funcione en Linux o MacOS si tienes una terminal basada en NU.
+### ⚠️ DISCLAIMER: Yo uso Windows, esto fue desarrollado usando NUshell bajo el Windows Terminal (el ultimo que salio). Al ser NUshell --se supone-- que funcione en Linux o MacOS si tienes una terminal basada en NU.
 
 # 🕹️ Comandos Disponibles
 
