@@ -34,6 +34,11 @@ Esto lo hice en una tarde debido a que Habitica esta muy por detrás de otras he
 
 Esto no quiere decir que no vaya a seguir creciendo, pienso ponerle mas y mas caracteristicas que me permitan poder manejar gran parte de las funciones de la plataforma desde el terminal, por ejemplo ponerle fecha a las tareas que agrego, lanzar hechizos, etc... Tiempo al tiempo.
 
+# 💡Ideas hasta el momento
+
+- Listar hechizos (todo skill list)
+- Lanzar hechizos a un todo (todo skill use [no. skill] [taks id]
+
 ![Habitica Nushell Dashboard](assets/terminal.png)
 
 # ⚙️ Instalación
