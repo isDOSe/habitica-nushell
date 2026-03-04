@@ -29,15 +29,28 @@ Finaliza la tarea con el ID especificado
 ```TODO WELCOME```
 Muestra el "dashboard" con la informacion de tu personaje en Habitica, tareas para hoy y algun mensaje.
 
+```TODO STATS```
+Muestra tus barras de estado (HP, XP, MP) y oro actual de forma rápida.
+
+```TODO SPELL LIST```
+Muestra los hechizos disponibles según tu clase y tu maná actual.
+
+```TODO SPELL USE [índice_hechizo] on [índice_tarea]```
+Lanza un hechizo sobre una tarea específica. El 'on' es un separador estético. Usa los índices mostrados en `todo spell list` y `todo list`.
+
+```TODO UPDATE```
+Fuerza la actualización de tus estadísticas locales (cache) desde los servidores de Habitica.
+
 # 📈 Futuro del proyecto
 Esto lo hice en una tarde debido a que Habitica esta muy por detrás de otras herramientas para organizar tareas y hábitos, Todoist y Ticktick por ejemplo, tiene launchers en sus apps de escritorio que permiten agregar de forma muy rápida tareas. Como yo uso mucho el terminal, por qué no hacer que desde ahi agregue tareas y descargar el cerebreo de ideas.
 
-Esto no quiere decir que no vaya a seguir creciendo, pienso ponerle mas y mas caracteristicas que me permitan poder manejar gran parte de las funciones de la plataforma desde el terminal, por ejemplo ponerle fecha a las tareas que agrego, lanzar hechizos, etc... Tiempo al tiempo.
+Esto no quiere decir que no vaya a seguir creciendo, pienso ponerle mas y mas caracteristicas que me permitan poder manejar gran parte de las funciones de la plataforma desde el terminal, por ejemplo ponerle fecha a las tareas que agrego, soporte para dailies, etc... Tiempo al tiempo.
 
-# 💡Ideas hasta el momento
+# 💡 Ideas hasta el momento
 
-- Listar hechizos (todo skill list)
-- Lanzar hechizos a un todo (todo skill use [no. skill] [taks id]
+- Poder ponerle fecha a las tareas que agrego.
+- Soporte para Dailies y Hábitos.
+- Notificaciones de escritorio cuando una tarea está por vencer.
 
 ![Habitica Nushell Dashboard](assets/terminal.png)
 

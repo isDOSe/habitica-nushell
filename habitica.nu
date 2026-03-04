@@ -154,3 +154,95 @@ export def "todo today" [] {
         | select text id 
     }
 }
+
+export def "todo spell use" [
+    spell_idx: int     
+    separator: string  
+    task_idx: int      
+] {
+    # 1. BUSCAR EL HECHIZO
+    let spells_list = (todo spell list)
+    let spell_match = ($spells_list | where index == $spell_idx)
+    
+    if ($spell_match | is-empty) {
+        print $"(ansi red_bold)Error: El hechizo #($spell_idx) no existe.(ansi reset)"
+        return
+    }
+    let spell_info = ($spell_match | first)
+
+    # 2. BUSCAR EN TODA LA LISTA
+    # Aquí llamamos a la función que trae TODOS los To-Dos pendientes
+    let todas_las_tareas = (todo list)
+    
+    if ($todas_las_tareas | is-empty) {
+        print $"(ansi red_bold)Error: No tienes ninguna tarea pendiente en tu lista.(ansi reset)"
+        return
+    }
+
+    # Buscamos por el índice de la tabla completa
+    let task_match = ($todas_las_tareas | enumerate | where index == ($task_idx - 1))
+
+    if ($task_match | is-empty) {
+        let max = ($todas_las_tareas | length)
+        print $"(ansi red_bold)Error: El índice ($task_idx) está fuera de rango (Máximo: ($max)).(ansi reset)"
+        return
+    }
+    let task_info = ($task_match | first | get item)
+
+    # 3. LANZAR EL HECHIZO
+    print $"(ansi yellow)Lanzando ($spell_info.nombre) sobre ($task_info.text)...(ansi reset)"
+
+    let headers = ["x-api-user" $USER_ID "x-api-key" $API_TOKEN "x-client" $CLIENT_ID]
+    let url = $"https://habitica.com/api/v3/user/class/cast/($spell_info.id)?targetId=($task_info.id)"
+
+    let r = (http post --headers $headers $url "{}") # Enviamos un body vacío ya que el ID va en la URL
+
+    if ($r | get -o success) == true {
+        print $"(ansi green_bold)⚔️¡Hechizo lanzado con éxito!(ansi reset)"
+        todo update 
+    } else {
+        let msg = ($r | get -o message | default "Error desconocido")
+        print $"(ansi red_bold)Error de Habitica: ($msg)(ansi reset)"
+    }
+}
+
+export def "todo spell list" [] {
+    if not ($CACHE_FILE | path exists) { todo update; return }
+    let data = (open $CACHE_FILE)
+    let clase = ($data.stats.class)
+    let mp_actual = ($data.stats.mp)
+
+    # Diccionario de hechizos por clase (puedes ampliarlo luego)
+    let spells = {
+        wizard: [
+            [id, nombre, costo, desc];
+            [fireball, "Bola de Fuego", 10, "Daño a jefes"]
+            [mpheal, "Sobretensión Etérea", 30, "Restaura Maná"]
+            [earth, "Terremoto", 35, "Daño a jefes (Int)"]
+            [frost, "Escarcha", 40, "Congela rachas"]
+        ],
+        warrior: [
+            [id, nombre, costo, desc];
+            [smash, "Golpe Brutal", 10, "Daño a jefes"]
+            [defensiveStance, "Postura Defensiva", 25, "Protege de daño"]
+            [valorousPresence, "Presencia Valerosa", 20, "Bonus de Fuerza"]
+        ],
+        healer: [
+            [id, nombre, costo, desc];
+            [heal, "Curación", 15, "Sana HP"]
+            [brightness, "Luminosidad", 15, "Bonus de Inteligencia"]
+        ],
+        rogue: [
+            [id, nombre, costo, desc];
+            [pickPocket, "Carterista", 15, "Gana Oro"]
+            [backStab, "Puñalada", 15, "Daño y Oro"]
+        ]
+    }
+
+    let mis_spells = ($spells | get -o $clase | enumerate | each {|s| 
+        $s.item | insert index ($s.index + 1)
+    })
+
+    print $"(ansi cyan_bold)--- TUS HECHIZOS (($clase)) --- (ansi reset) Mana: ($mp_actual)"
+    return $mis_spells
+}
