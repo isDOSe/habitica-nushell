@@ -69,13 +69,33 @@ export def "todo list" [] {
     let headers = { "x-api-user": $USER_ID, "x-api-key": $API_TOKEN, "x-client": $CLIENT_ID }
     let r = (http get -H $headers https://habitica.com/api/v3/tasks/user?type=todos)
     if ($r | get -o success) == true { 
-        $r.data | where completed == false | select text id 
+        $r.data 
+        | where completed == false 
+        | enumerate 
+        | each {|t| { index: ($t.index + 1), text: $t.item.text, id: $t.item.id } }
     }
 }
 
-export def "todo done" [id: string] {
+export def "todo done" [id_or_index: string] {
     let headers = { "x-api-user": $USER_ID, "x-api-key": $API_TOKEN, "x-client": $CLIENT_ID }
-    let r = (http post -H $headers $"https://habitica.com/api/v3/tasks/($id)/score/up")
+    mut id = $id_or_index
+    let es_numero = (try { $id_or_index | into int | $in > 0 } catch { false })
+    if $es_numero {
+        let idx = ($id_or_index | into int) - 1
+        let tareas = (todo list)
+        if ($tareas | is-empty) {
+            print "(ansi red_bold)No hay tareas pendientes.(ansi reset)"
+            return
+        }
+        let tarea_encontrada = ($tareas | enumerate | where index == $idx | get -i item.0)
+        if ($tarea_encontrada == null) {
+            print "(ansi red_bold)Índice fuera de rango.(ansi reset)"
+            return
+        }
+        $id = ($tarea_encontrada.id)
+    }
+    print $"ID usado para completar: ($id)"
+    let r = (http post -H $headers $"https://habitica.com/api/v3/tasks/($id)/score/up" '')
     if ($r | get -o success) == true { 
         print "✅ ¡Tarea completada!"; todo update 
     }
@@ -123,10 +143,10 @@ export def "todo welcome" [] {
             print $"(ansi green_bold)✨ ¡Todo despejado! No hay misiones para hoy. ¡A descansar, héroe!(ansi reset)"
             
             # Opcional: Un pequeño dibujo de una fogata o descanso
-            print $"(ansi red)   (    (   (ansi reset)"
-            print $"(ansi red)    )    )   (ansi reset)"
-            print $"(ansi yellow)  [          ] (ansi reset)"
-            print $"(ansi yellow)   \\________/ (ansi reset)"
+            #print ((ansi red) + "   (    (   " + (ansi reset))
+            #print ((ansi red) + "    )    )   " + (ansi reset))
+            #print ((ansi yellow) + "  [          ] " + (ansi reset))
+            #print ((ansi yellow) + "   \\________/ " + (ansi reset))
         }
     } catch { }
 }
@@ -134,8 +154,6 @@ export def "todo welcome" [] {
 
 export def "todo today" [] {
     let headers = ["x-api-user" $USER_ID "x-api-key" $API_TOKEN "x-client" $CLIENT_ID]
-    
-    # Obtenemos la fecha de hoy a medianoche para comparar solo días
     let hoy = (date now | format date "%Y-%m-%d")
     
     let r = (http get --headers $headers https://habitica.com/api/v3/tasks/user?type=todos)
@@ -143,8 +161,8 @@ export def "todo today" [] {
     if ($r | get -o success) == true { 
         $r.data 
         | where completed == false 
-        | filter {|t| 
-            # Verificamos si tiene fecha y si esa fecha coincide con hoy
+        # Cambiamos 'filter' por 'where' (el bloque de código es el mismo)
+        | where {|t| 
             if ($t.date? != null) {
                 ($t.date | str substring 0..9) == $hoy
             } else {
